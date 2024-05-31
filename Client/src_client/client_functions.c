@@ -45,10 +45,12 @@ int setup_client()
 
 void print_welcome_banner()
 {
-    printf("========================================\n");
+    printf("\n========================================\n");
     printf("     Welcome to the TCP File Transfer    \n");
     printf("========================================\n");
     printf("          Author: DH_MINI              \n");
+    printf("========================================\n");
+    printf("Type 'help' for a list of available commands.\n");
     printf("========================================\n\n");
 }
 
@@ -57,17 +59,17 @@ void print_help()
 
     printf("\nAvailable commands:\n");
     printf("========================================\n");
-    printf("  ls [directory]       List the contents of the specified directory on the server.\n");
-    printf("  cd [directory]       Change the current directory on the server.\n");
-    printf("  get [remote_file] [local_file]  Download a file from the server.\n");
-    printf("  put [local_file] [remote_file]  Upload a file to the server.\n");
-    printf("  rnm [old_name] [new_name]  Rename a file on the server.\n");
-    printf("  rmv [file_name]      Remove a file from the server.\n");
-    printf("  check [file_name]    Check if a file exists on the server.\n");
-    printf("  rget [remote_file] [local_file]  Resume a file download from the server.\n");
-    printf("  rput [local_file] [remote_file]  Resume a file upload to the server.\n");
-    printf("  help                 Display this help information.\n");
-    printf("  exit                 Exit the client program.\n");
+    printf("ls\t [directory]\t\t\tList the contents of the specified directory on the server.\n");
+    printf("cd\t [directory]\t\t\tChange the current directory on the server.\n");
+    printf("get\t [remote_file]\t [local_file]\tDownload a file from the server.\n");
+    printf("put\t [local_file]\t [remote_file]\tUpload a file to the server.\n");
+    printf("rnm\t [old_name]\t [new_name]\tRename a file on the server.\n");
+    printf("rmv\t [file_name]\t\t\tRemove a file from the server.\n");
+    printf("check\t [file_name]\t\t\tCheck if a file exists on the server.\n");
+    printf("rget\t [remote_file]\t [local_file]\tResume a file download from the server.\n");
+    printf("rput\t [local_file]\t [remote_file]\tResume a file upload to the server.\n");
+    printf("help\t\t\t\t\tDisplay this help information.\n");
+    printf("exit\t\t\t\t\tExit the client program.\n");
     printf("========================================\n\n");
 }
 

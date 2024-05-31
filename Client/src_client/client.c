@@ -12,6 +12,8 @@ int main()
     char buffer[1024];
     ClientMode mode = MODE_REMOTE;
 
+    print_welcome_banner();
+
     while (1)
     {
         // 清空命令和参数字符串
