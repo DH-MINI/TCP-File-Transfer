@@ -48,7 +48,7 @@ void print_welcome_banner()
     printf("========================================\n");
     printf("     Welcome to the TCP File Transfer    \n");
     printf("========================================\n");
-    printf("          Author: Your Name              \n");
+    printf("          Author: DH_MINI              \n");
     printf("========================================\n\n");
 }
 
