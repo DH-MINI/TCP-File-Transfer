@@ -3,6 +3,10 @@
 
 void handle_ls_command(int client_socket, const char *dir)
 {
+    if (strlen(dir) == 0)
+    {
+        dir = ".";
+    }
     DIR *d;
     struct dirent *dir_entry;
     char response[1024] = {0};

@@ -133,7 +133,12 @@ void handle_client(int client_socket)
             print_server_message("Received CMD_TYPE_RESUME_PUT");
             handle_resume_put_command(client_socket, package.header.arg1);
             break;
-
+        case CMD_TYPE_EXIT:
+            // 退出
+            print_server_message("Received CMD_TYPE_EXIT");
+            close(client_socket);
+            exit(0);
+            break;
         default:
             print_server_message("Received unknown command");
             break;

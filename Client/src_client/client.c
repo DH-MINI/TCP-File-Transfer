@@ -41,6 +41,7 @@ int main()
 
         if (strcmp(command, "exit") == 0)
         {
+            send_tcp_package(client_socket, CMD_TYPE_EXIT, NULL, NULL, NULL, 0);
             break;
         }
         else if (strcmp(command, "help") == 0)

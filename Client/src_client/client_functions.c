@@ -57,22 +57,26 @@ bool check_args(const char *command, const char *arg1, const char *arg2)
     // printf("strlen(arg2): %ld\n", strlen(arg2));
 
     // 检查命令和参数的有效性
-    if (strcmp(command, "ls") == 0 || strcmp(command, "cd") == 0)
+    if (strcmp(command, "cd") == 0 || strcmp(command, "mode") == 0 || strcmp(command, "rmv") == 0 || strcmp(command, "check") == 0)
     {
         return strlen(arg1) != 0 && strlen(arg2) == 0;
     }
     else if (strcmp(command, "get") == 0 || strcmp(command, "put") == 0 ||
-             strcmp(command, "rnm") == 0 || strcmp(command, "rmv") == 0 ||
-             strcmp(command, "check") == 0 || strcmp(command, "rget") == 0 ||
+             strcmp(command, "rnm") == 0 || strcmp(command, "rget") == 0 ||
              strcmp(command, "rput") == 0)
     {
         return strlen(arg1) != 0 && strlen(arg2) != 0;
     }
-    else if (strcmp(command, "help") == 0 || strcmp(command, "exit") == 0 || strcmp(command, "mode") == 0)
+    else if (strcmp(command, "help") == 0 || strcmp(command, "exit") == 0)
     {
 
         return strlen(arg1) == 0 && strlen(arg2) == 0;
     }
+    else if (strcmp(command, "ls") == 0)
+    {
+        return (strlen(arg1) == 0 && strlen(arg2) == 0 || strlen(arg1) != 0 && strlen(arg2) == 0);
+    }
+
     return false;
 }
 
@@ -266,7 +270,7 @@ void handle_local_command(int client_socket, const char *command, const char *ar
     }
     else if (strcmp(command, "get") == 0)
     {
-        print_client_message("ERROR", "GET command is only available in Local mode", "\033[1;31m");
+        print_client_message("ERROR", "GET command is only available in REMOTE mode", "\033[1;31m");
     }
     else if (strcmp(command, "put") == 0)
     {
@@ -347,6 +351,10 @@ void handle_command(int client_socket, const char *command, const char *arg1, co
 
 void handle_local_ls(const char *dir)
 {
+    if (strlen(dir) == 0)
+    {
+        dir = ".";
+    }
     DIR *d;
     struct dirent *dir_entry;
     char response[1024] = {0};
