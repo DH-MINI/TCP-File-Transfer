@@ -87,3 +87,4 @@ The client supports the following commands:
 
 Both the client and server programs include basic error handling to manage unexpected situations such as network failures, file access errors, and invalid commands. Logs and error messages are printed to the console to aid in debugging.
 
+[English](README.md) | [中文](README_ZH.md)
