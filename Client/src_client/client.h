@@ -20,6 +20,17 @@ typedef enum
 int setup_client();
 
 /**
+ * @brief 检查传入的命令和参数是否有效
+ *
+ * @param command 命令
+ * @param arg1 参数1
+ * @param arg2 参数2
+ * @return true 参数有效
+ * @return false 参数无效
+ */
+bool check_args(const char *command, const char *arg1, const char *arg2);
+
+/**
  * @brief 处理用户输入的命令
  *
  * @param client_socket 客户端套接字描述符

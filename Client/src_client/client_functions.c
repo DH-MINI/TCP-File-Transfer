@@ -7,6 +7,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <stdbool.h>
 
 int setup_client()
 {
@@ -43,6 +44,38 @@ int setup_client()
     return sockfd;
 }
 
+bool check_args(const char *command, const char *arg1, const char *arg2)
+{
+    if (command == NULL)
+    {
+        return false;
+    }
+
+    // print strlen() 检查参数长度 方便下面检验
+    // printf("strlen(command): %ld\n", strlen(command));
+    // printf("strlen(arg1): %ld\n", strlen(arg1));
+    // printf("strlen(arg2): %ld\n", strlen(arg2));
+
+    // 检查命令和参数的有效性
+    if (strcmp(command, "ls") == 0 || strcmp(command, "cd") == 0)
+    {
+        return strlen(arg1) != 0 && strlen(arg2) == 0;
+    }
+    else if (strcmp(command, "get") == 0 || strcmp(command, "put") == 0 ||
+             strcmp(command, "rnm") == 0 || strcmp(command, "rmv") == 0 ||
+             strcmp(command, "check") == 0 || strcmp(command, "rget") == 0 ||
+             strcmp(command, "rput") == 0)
+    {
+        return strlen(arg1) != 0 && strlen(arg2) != 0;
+    }
+    else if (strcmp(command, "help") == 0 || strcmp(command, "exit") == 0 || strcmp(command, "mode") == 0)
+    {
+
+        return strlen(arg1) == 0 && strlen(arg2) == 0;
+    }
+    return false;
+}
+
 void print_welcome_banner()
 {
     printf("\n========================================\n");
@@ -58,7 +91,7 @@ void print_help()
 {
 
     printf("\nAvailable commands:\n");
-    printf("========================================\n");
+    printf("======================================= ======================================== \n");
     printf("ls\t [directory]\t\t\tList the contents of the specified directory on the server.\n");
     printf("cd\t [directory]\t\t\tChange the current directory on the server.\n");
     printf("get\t [remote_file]\t [local_file]\tDownload a file from the server.\n");
@@ -68,9 +101,10 @@ void print_help()
     printf("check\t [file_name]\t\t\tCheck if a file exists on the server.\n");
     printf("rget\t [remote_file]\t [local_file]\tResume a file download from the server.\n");
     printf("rput\t [local_file]\t [remote_file]\tResume a file upload to the server.\n");
+    printf("mode\t [local/remote]\t\t\tSwitch between local and remote mode.\n");
     printf("help\t\t\t\t\tDisplay this help information.\n");
     printf("exit\t\t\t\t\tExit the client program.\n");
-    printf("========================================\n\n");
+    printf("======================================= ========================================\n\n");
 }
 
 void prompt_file_action(char *filename)
@@ -96,8 +130,15 @@ void prompt_file_action(char *filename)
     case 'r':
         // Rename
         printf("Enter new filename: ");
-        fgets(filename, 256, stdin);
-        filename[strcspn(filename, "\n")] = 0;
+        char Newfilename[256];
+        fgets(Newfilename, 256, stdin);
+        Newfilename[strcspn(Newfilename, "\n")] = 0;
+
+        if (strcmp(Newfilename, filename) == 0)
+        {
+            print_client_message("ERROR", "New filename is the same as the old filename. Canceling rename.", "\033[1;31m");
+            filename[0] = '\0'; // Clear filename to indicate canceling
+        }
         break;
     default:
         printf("Invalid choice. Skipping.\n");

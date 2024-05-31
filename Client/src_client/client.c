@@ -26,7 +26,18 @@ int main()
         // 读取用户输入
         fgets(buffer, sizeof(buffer), stdin);
         buffer[strcspn(buffer, "\n")] = 0;
-        sscanf(buffer, "%s %s %s", command, arg1, arg2);
+        int num_args = sscanf(buffer, "%s %s %s", command, arg1, arg2);
+        // printf("num_args: %d\n", num_args);
+        if (num_args == -1)
+        {
+            continue;
+        }
+
+        if (check_args(command, arg1, arg2) == false)
+        {
+            print_client_message("ERROR", "Invalid arguments.", "\033[1;31m");
+            continue;
+        }
 
         if (strcmp(command, "exit") == 0)
         {
