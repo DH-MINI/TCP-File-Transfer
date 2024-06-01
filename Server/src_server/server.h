@@ -96,7 +96,8 @@ void handle_resume_get_command(int client_socket, const char *remote_file_name, 
  *
  * @param client_socket 客户端套接字描述符
  * @param remote_file_name 远程文件名
+ * @param offset 文件偏移量
  */
-void handle_resume_put_command(int client_socket, const char *remote_file_name);
+void handle_resume_put_command(int client_socket, const char *remote_file_name, long offset);
 
 #endif // SERVER_H

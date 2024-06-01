@@ -87,7 +87,7 @@ void print_welcome_banner()
     printf("========================================\n");
     printf("          Author: DH_MINI              \n");
     printf("========================================\n");
-    printf("Type 'help' for a list of available commands.\n");
+    printf("  Type 'help' for available commands.\n");
     printf("========================================\n\n");
 }
 
@@ -114,11 +114,12 @@ void print_help()
 void prompt_file_action(char *filename)
 {
     char choice[10];
-    printf("File '%s' already exists. Choose an action:\n", filename);
+    // printf("File '%s' already exists. Choose an action:\n", filename);
+    print_client_message("INFO", "File already exists. Choose an action:", "\033[1;33m");
     printf("o - Overwrite\n");
     printf("s - Skip\n");
     printf("r - Rename\n");
-    printf("Choice: ");
+    printf("Choice ==> ");
     fgets(choice, sizeof(choice), stdin);
     choice[strcspn(choice, "\n")] = 0;
 
@@ -142,6 +143,10 @@ void prompt_file_action(char *filename)
         {
             print_client_message("ERROR", "New filename is the same as the old filename. Canceling rename.", "\033[1;31m");
             filename[0] = '\0'; // Clear filename to indicate canceling
+        }
+        else
+        {
+            snprintf(filename, 256, "%s", Newfilename);
         }
         break;
     default:
@@ -188,7 +193,7 @@ void handle_remote_command(int client_socket, const char *command, const char *a
     }
     else if (strcmp(command, "get") == 0)
     {
-        if (check_file_exists(modifiable_arg2))
+        while (check_file_exists(modifiable_arg2))
         {
             prompt_file_action(modifiable_arg2);
             if (modifiable_arg2[0] == '\0')
@@ -279,21 +284,29 @@ void handle_local_command(int client_socket, const char *command, const char *ar
         modifiable_arg2[sizeof(modifiable_arg2) - 1] = '\0';
 
         // 检查远程文件是否存在（需要先发送CHECK命令到服务器）
-        if (send_tcp_package(client_socket, CMD_TYPE_CHECK, arg2, NULL, NULL, 0) == -1)
+        while (true)
         {
-            print_client_message("ERROR", "Failed to send CMD_TYPE_CHECK", "\033[1;31m");
-        }
-        else
-        {
-            TCPpackage package;
-            receive_tcp_package(client_socket, &package);
-            if (strncmp(package.data, "File does not exist:", 19) != 0)
+            if (send_tcp_package(client_socket, CMD_TYPE_CHECK, modifiable_arg2, NULL, NULL, 0) == -1)
             {
-                prompt_file_action(modifiable_arg2);
-                if (modifiable_arg2[0] == '\0')
+                print_client_message("ERROR", "Failed to send CMD_TYPE_CHECK", "\033[1;31m");
+                break;
+            }
+            else
+            {
+                TCPpackage package;
+                receive_tcp_package(client_socket, &package);
+                if (strncmp(package.data, "File does not exist:", 19) == 0)
                 {
-                    print_client_message("INFO", "Put command skipped", "\033[1;33m");
-                    return;
+                    break;
+                }
+                else
+                {
+                    prompt_file_action(modifiable_arg2);
+                    if (modifiable_arg2[0] == '\0')
+                    {
+                        print_client_message("INFO", "Put command skipped", "\033[1;33m");
+                        break;
+                    }
                 }
             }
         }
@@ -447,6 +460,10 @@ void handle_remote_resume_get(int client_socket, const char *remote_file_name, c
             offset = ftell(file);
             fclose(file);
         }
+    }
+    else
+    {
+        print_client_message("INFO", "Local file does not exist. Starting from the beginning...", "\033[1;33m");
     }
 
     if (send_tcp_package(client_socket, CMD_TYPE_RESUME_GET, remote_file_name, NULL, NULL, offset) == -1)

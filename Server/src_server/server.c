@@ -131,7 +131,7 @@ void handle_client(int client_socket)
         case CMD_TYPE_RESUME_PUT:
             // 断点续传上传文件
             print_server_message("Received CMD_TYPE_RESUME_PUT");
-            handle_resume_put_command(client_socket, package.header.arg1);
+            handle_resume_put_command(client_socket, package.header.arg1, package.header.data_length);
             break;
         case CMD_TYPE_EXIT:
             // 退出

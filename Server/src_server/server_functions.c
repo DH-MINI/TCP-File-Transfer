@@ -120,9 +120,9 @@ void handle_resume_get_command(int client_socket, const char *remote_file_name, 
     send_file(client_socket, remote_file_name, remote_file_name, true, offset);
 }
 
-void handle_resume_put_command(int client_socket, const char *remote_file_name)
+void handle_resume_put_command(int client_socket, const char *remote_file_name, long offset)
 {
-    receive_file(client_socket, remote_file_name, remote_file_name, true, 0);
+    receive_file(client_socket, remote_file_name, remote_file_name, true, offset);
 
     char response[1024];
     snprintf(response, sizeof(response), "Successfully received file with resume: %s", remote_file_name);

@@ -46,7 +46,7 @@ void handle_command(int client_socket, const char *command, const char *arg1, co
  *
  * @param client_socket 客户端套接字描述符
  */
-void read_response(int client_socket);
+void receive_response(int client_socket);
 
 /**
  * @brief 打印帮助信息

@@ -22,7 +22,7 @@ int main()
         memset(arg2, 0, sizeof(arg2));
         memset(buffer, 0, sizeof(buffer));
 
-        printf("\033[1;31mclient\033[0m (%s): ==> ", (mode == MODE_REMOTE) ? "REMOTE" : "LOCAL");
+        printf("\033[1;31mclient\033[0m (%s): ==> ", (mode == MODE_REMOTE) ? "\033[1;32mREMOTE\033[0m" : "\033[1;32mLOCAL \033[0m");
         // 读取用户输入
         fgets(buffer, sizeof(buffer), stdin);
         buffer[strcspn(buffer, "\n")] = 0;
