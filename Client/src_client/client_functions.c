@@ -297,6 +297,18 @@ void handle_local_command(int client_socket, const char *command, const char *ar
                 receive_tcp_package(client_socket, &package);
                 if (strncmp(package.data, "File does not exist:", 19) == 0)
                 {
+                    // 上传文件
+                    if (send_tcp_package(client_socket, CMD_TYPE_PUT, modifiable_arg2, NULL, NULL, 0) == -1)
+                    {
+                        print_client_message("ERROR", "Failed to send CMD_TYPE_PUT", "\033[1;31m");
+                    }
+                    else
+                    {
+                        send_file(client_socket, arg1, modifiable_arg2, false, 0); // 默认不使用断点续传
+                    }
+                    TCPpackage package;
+                    receive_tcp_package(client_socket, &package);
+                    print_client_message("RESPONSE", package.data, "\033[1;34m");
                     break;
                 }
                 else
@@ -310,19 +322,6 @@ void handle_local_command(int client_socket, const char *command, const char *ar
                 }
             }
         }
-
-        // 上传文件
-        if (send_tcp_package(client_socket, CMD_TYPE_PUT, modifiable_arg2, NULL, NULL, 0) == -1)
-        {
-            print_client_message("ERROR", "Failed to send CMD_TYPE_PUT", "\033[1;31m");
-        }
-        else
-        {
-            send_file(client_socket, arg1, modifiable_arg2, false, 0); // 默认不使用断点续传
-        }
-        TCPpackage package;
-        receive_tcp_package(client_socket, &package);
-        print_client_message("RESPONSE", package.data, "\033[1;34m");
     }
     else if (strcmp(command, "rnm") == 0)
     {
