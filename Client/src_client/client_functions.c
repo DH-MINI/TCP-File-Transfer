@@ -255,7 +255,7 @@ void handle_remote_command(int client_socket, const char *command, const char *a
     }
     else if (strcmp(command, "rput") == 0)
     {
-        print_client_message("ERROR", "RESUME PUT command is only available in REMOTE mode", "\033[1;31m");
+        print_client_message("ERROR", "RESUME PUT command is only available in LOCAL mode", "\033[1;31m");
     }
     else
     {
