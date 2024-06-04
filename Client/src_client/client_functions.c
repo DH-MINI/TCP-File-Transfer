@@ -203,9 +203,26 @@ void handle_remote_command(int client_socket, const char *command, const char *a
             }
         }
 
+        if (send_tcp_package(client_socket, CMD_TYPE_CHECK, arg1, NULL, NULL, 0) == -1)
+        {
+            print_client_message("ERROR", "Failed to send CMD_TYPE_CHECK", "\033[1;31m");
+            return;
+        }
+        else
+        {
+            TCPpackage package;
+            receive_tcp_package(client_socket, &package);
+            if (strncmp(package.data, "File does not exist:", 19) == 0)
+            {
+                print_client_message("ERROR", "File does not exist on the server", "\033[1;31m");
+                return;
+            }
+        }
+
         if (send_tcp_package(client_socket, CMD_TYPE_GET, arg1, modifiable_arg2, NULL, 0) == -1)
         {
             print_client_message("ERROR", "Failed to send CMD_TYPE_GET", "\033[1;31m");
+            return;
         }
         else
         {
@@ -279,6 +296,12 @@ void handle_local_command(int client_socket, const char *command, const char *ar
     }
     else if (strcmp(command, "put") == 0)
     {
+        if (check_file_exists(arg1) == false)
+        {
+            print_client_message("ERROR", "Local file does not exist", "\033[1;31m");
+            return;
+        }
+
         char modifiable_arg2[256];
         strncpy(modifiable_arg2, arg2, sizeof(modifiable_arg2));
         modifiable_arg2[sizeof(modifiable_arg2) - 1] = '\0';
