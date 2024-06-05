@@ -85,8 +85,9 @@ int check_file_exists(const char *filename);
  * @brief 提示用户对已存在的文件进行操作
  *
  * @param filename 文件名
+ * @param choice 用户选择
  */
-void prompt_file_action(char *filename);
+void prompt_file_action(char *filename, char *choice);
 
 /**
  * @brief 处理本地重命名文件的命令
