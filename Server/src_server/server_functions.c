@@ -59,7 +59,7 @@ void handle_put_command(int client_socket, const char *remote_file_name)
     receive_file(client_socket, remote_file_name, remote_file_name, false, 0);
 
     char response[1024];
-    snprintf(response, sizeof(response), "Successfully received file: %s", remote_file_name);
+    snprintf(response, sizeof(response), "Server: Successfully received file: %s", remote_file_name);
     send_tcp_package(client_socket, CMD_TYPE_PUT, NULL, NULL, response, strlen(response));
 }
 

@@ -111,9 +111,9 @@ void print_help()
     printf("======================================= ========================================\n\n");
 }
 
-void prompt_file_action(char *filename)
+void prompt_file_action(char *filename, char *choice)
 {
-    char choice[10];
+
     // printf("File '%s' already exists. Choose an action:\n", filename);
     print_client_message("INFO", "File already exists. Choose an action:", "\033[1;33m");
     printf("o - Overwrite\n");
@@ -166,6 +166,7 @@ void receive_response(int client_socket)
 void handle_remote_command(int client_socket, const char *command, const char *arg1, const char *arg2)
 {
     char modifiable_arg2[256];
+    char choice[10];
     strncpy(modifiable_arg2, arg2, sizeof(modifiable_arg2));
     modifiable_arg2[sizeof(modifiable_arg2) - 1] = '\0';
 
@@ -195,11 +196,15 @@ void handle_remote_command(int client_socket, const char *command, const char *a
     {
         while (check_file_exists(modifiable_arg2))
         {
-            prompt_file_action(modifiable_arg2);
+            prompt_file_action(modifiable_arg2, choice);
             if (modifiable_arg2[0] == '\0')
             {
                 print_client_message("INFO", "Get command skipped", "\033[1;33m");
                 return;
+            }
+            if (choice[0] == 'o')
+            {
+                break;
             }
         }
 
@@ -302,6 +307,7 @@ void handle_local_command(int client_socket, const char *command, const char *ar
             return;
         }
 
+        char choice[10];
         char modifiable_arg2[256];
         strncpy(modifiable_arg2, arg2, sizeof(modifiable_arg2));
         modifiable_arg2[sizeof(modifiable_arg2) - 1] = '\0';
@@ -318,12 +324,13 @@ void handle_local_command(int client_socket, const char *command, const char *ar
             {
                 TCPpackage package;
                 receive_tcp_package(client_socket, &package);
-                if (strncmp(package.data, "File does not exist:", 19) == 0)
+                if (strncmp(package.data, "File does not exist:", 19) == 0 || choice[0] == 'o')
                 {
                     // 上传文件
                     if (send_tcp_package(client_socket, CMD_TYPE_PUT, modifiable_arg2, NULL, NULL, 0) == -1)
                     {
                         print_client_message("ERROR", "Failed to send CMD_TYPE_PUT", "\033[1;31m");
+                        return;
                     }
                     else
                     {
@@ -332,11 +339,11 @@ void handle_local_command(int client_socket, const char *command, const char *ar
                     TCPpackage package;
                     receive_tcp_package(client_socket, &package);
                     print_client_message("RESPONSE", package.data, "\033[1;34m");
-                    break;
+                    return;
                 }
                 else
                 {
-                    prompt_file_action(modifiable_arg2);
+                    prompt_file_action(modifiable_arg2, choice);
                     if (modifiable_arg2[0] == '\0')
                     {
                         print_client_message("INFO", "Put command skipped", "\033[1;33m");
