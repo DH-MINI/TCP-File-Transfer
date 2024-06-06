@@ -109,7 +109,7 @@ int send_file(int socket_fd, const char *local_file_name, const char *remote_fil
         fseek(file, offset, SEEK_SET);
     }
 
-    long remaining_size = file_size - offset;
+    size_t remaining_size = file_size - offset;
     while (remaining_size > 0)
     {
         char buffer[1024];
@@ -142,6 +142,7 @@ int send_file(int socket_fd, const char *local_file_name, const char *remote_fil
 
 int receive_file(int socket_fd, const char *remote_file_name, const char *local_file_name, bool resume, long fileoffset)
 {
+    (void)remote_file_name;
     FILE *file = NULL;
     long offset = 0;
 
@@ -182,7 +183,7 @@ int receive_file(int socket_fd, const char *remote_file_name, const char *local_
         }
         size_t bytes_written = fwrite(package.data, 1, package.header.data_length, file);
         printf("Received %ld bytes...\n", bytes_written);
-        if (bytes_written < package.header.data_length && ferror(file))
+        if (bytes_written < (size_t)package.header.data_length && ferror(file))
         {
             perror("fwrite");
             fclose(file);

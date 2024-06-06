@@ -40,6 +40,7 @@
 使用提供的 `compile.sh` 脚本编译客户端和服务器程序。
 
 ```sh
+chmod +x compile.sh
 ./compile.sh
 ```
 
@@ -50,6 +51,7 @@
 要启动服务器，请使用 `run_server.sh` 脚本：
 
 ```sh
+chmod +x run_server.sh
 ./run_server.sh
 ```
 
@@ -60,6 +62,7 @@
 要启动客户端，请使用 `run_client.sh` 脚本：
 
 ```sh
+chmod +x run_client.sh
 ./run_client.sh
 ```
 

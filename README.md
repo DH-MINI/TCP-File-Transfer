@@ -40,6 +40,7 @@ This project implements a TCP-based file transmission system consisting of a cli
 Use the provided `compile.sh` script to compile both the client and server programs.
 
 ```sh
+chmod +x compile.sh
 ./compile.sh
 ```
 
@@ -50,6 +51,7 @@ This script will compile the source files and generate the executable binaries f
 To start the server, use the `run_server.sh` script:
 
 ```sh
+chmod +x run_server.sh
 ./run_server.sh
 ```
 
@@ -60,6 +62,7 @@ This will launch the server and it will start listening for client connections.
 To start the client, use the `run_client.sh` script:
 
 ```sh
+chmod +x run_client.sh
 ./run_client.sh
 ```
 

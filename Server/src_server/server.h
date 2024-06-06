@@ -1,7 +1,19 @@
 #ifndef SERVER_H
 #define SERVER_H
 
+#define SERVER_PORT 8080
+#define BACKLOG 10 // 连接请求队列的最大长度
+
 #include "../../Common/common.h"
+
+int server_socket;
+
+/**
+ * @brief 信号处理函数，用于优雅地关闭服务器
+ *
+ * @param sig 信号
+ */
+void handle_sigint(int sig);
 
 /**
  * @brief 初始化服务器套接字

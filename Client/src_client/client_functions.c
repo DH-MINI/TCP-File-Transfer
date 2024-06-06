@@ -59,22 +59,22 @@ bool check_args(const char *command, const char *arg1, const char *arg2)
     // 检查命令和参数的有效性
     if (strcmp(command, "cd") == 0 || strcmp(command, "mode") == 0 || strcmp(command, "rmv") == 0 || strcmp(command, "check") == 0)
     {
-        return strlen(arg1) != 0 && strlen(arg2) == 0;
+        return (strlen(arg1) != 0) && (strlen(arg2) == 0);
     }
     else if (strcmp(command, "get") == 0 || strcmp(command, "put") == 0 ||
              strcmp(command, "rnm") == 0 || strcmp(command, "rget") == 0 ||
              strcmp(command, "rput") == 0)
     {
-        return strlen(arg1) != 0 && strlen(arg2) != 0;
+        return (strlen(arg1) != 0) && (strlen(arg2) != 0);
     }
     else if (strcmp(command, "help") == 0 || strcmp(command, "exit") == 0)
     {
 
-        return strlen(arg1) == 0 && strlen(arg2) == 0;
+        return (strlen(arg1) == 0) && (strlen(arg2) == 0);
     }
     else if (strcmp(command, "ls") == 0)
     {
-        return (strlen(arg1) == 0 && strlen(arg2) == 0 || strlen(arg1) != 0 && strlen(arg2) == 0);
+        return ((strlen(arg1) == 0 && strlen(arg2) == 0) || (strlen(arg1) != 0 && strlen(arg2) == 0));
     }
 
     return false;
