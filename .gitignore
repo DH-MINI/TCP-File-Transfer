@@ -1,4 +1,8 @@
-*.c
-*.h
-*.md
-*.sh
+# Ignore everything
+*
+
+# Except for specific file types
+!*.sh
+!*.c
+!*.h
+!*.mdå
